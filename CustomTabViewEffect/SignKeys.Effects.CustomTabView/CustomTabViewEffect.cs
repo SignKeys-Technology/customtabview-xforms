@@ -4,8 +4,41 @@ using Xamarin.Forms;
 
 namespace SignKeys.Effects
 {
+    public enum TabHeightMode
+    {
+        Absolute,
+        RelativeToNativeTabBar,
+        ProportionalToNativeTabBar
+    }
+    public class TabHeight
+    {
+        public TabHeightMode Mode { get; set; }
+        public double Value { get; set; }
+
+        public TabHeight(TabHeightMode mode, double value)
+        {
+            Mode = mode;
+            Value = value;
+        }
+    }
     public static class TabEffect
     {
+        public static readonly BindableProperty CustomTabHeightProperty = BindableProperty.Create(
+        "CustomTabHeight",
+        typeof(TabHeight),
+        typeof(TabEffect),
+        default(TabHeight),
+        BindingMode.OneWay);
+
+        public static TabHeight GetCustomTabHeight(BindableObject obj)
+        {
+            return (TabHeight)obj.GetValue(CustomTabHeightProperty);
+        }
+        public static void SetCustomTabHeight(BindableObject obj, TabHeight value)
+        {
+            obj.SetValue(CustomTabHeightProperty, value);
+        }
+
         public static BindableProperty TabViewProperty = BindableProperty.CreateAttached(
             "TabView",
             typeof(ICustomTabView),
@@ -23,20 +56,20 @@ namespace SignKeys.Effects
             obj.SetValue(TabViewProperty, value);
         }
 
-        public static BindableProperty TabbarColorProperty = BindableProperty.CreateAttached(
-            "TabbarColor",
+        public static BindableProperty TabBarColorProperty = BindableProperty.CreateAttached(
+            "TabBarColor",
             typeof(Color),
             typeof(TabEffect),
             default(Color),
             BindingMode.OneWay
         );
-        public static Color GetTabbarColor(BindableObject obj)
+        public static Color GetTabBarColor(BindableObject obj)
         {
-            return (Color)obj.GetValue(TabbarColorProperty);
+            return (Color)obj.GetValue(TabBarColorProperty);
         }
-        public static void SetTabbarColor(BindableObject obj, Color value)
+        public static void SetTabBarColor(BindableObject obj, Color value)
         {
-            obj.SetValue(TabbarColorProperty, value);
+            obj.SetValue(TabBarColorProperty, value);
         }
 
         static void HandleTabViewChanged(BindableObject bindable, object oldValue, object newValue)

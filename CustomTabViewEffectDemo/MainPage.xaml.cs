@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using SignKeys.Effects;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace CustomTabViewEffectDemo
@@ -11,6 +12,7 @@ namespace CustomTabViewEffectDemo
         public MainPage()
         {
             On<Xamarin.Forms.PlatformConfiguration.Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
+            TabEffect.SetCustomTabHeight(this, new TabHeight(TabHeightMode.RelativeToNativeTabBar, 16));
             InitializeComponent();
         }
     }

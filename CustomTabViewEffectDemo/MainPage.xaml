@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:CustomTabViewEffectDemo"
     mc:Ignorable="d"
     x:Class="CustomTabViewEffectDemo.MainPage"
-    effects:TabEffect.TabbarColor="White">
+    effects:TabEffect.TabBarColor="White">
     <effects:TabEffect.TabView>
         <local:TabView
                 VerticalOptions="End"/>

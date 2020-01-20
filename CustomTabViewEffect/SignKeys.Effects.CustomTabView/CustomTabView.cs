@@ -14,7 +14,7 @@ namespace SignKeys.Effects
         {
             if (view is View v
                 && v.Parent is TabbedPage page
-                && 0 < index
+                && 0 <= index
                 && index < page.Children.Count)
             {
                 page.CurrentPage = page.Children[index];

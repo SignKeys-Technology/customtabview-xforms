@@ -12,7 +12,7 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportEffect(typeof(SignKeys.Effects.Platform.iOS.CustomTabViewEffectImpl), "CustomTabViewEffect")]
 namespace SignKeys.Effects.Platform.iOS
 {
-    internal class RendererContainer: UIView
+    internal class RendererContainer : UIView
     {
         UIView renderer;
         UIView bottomSpace;
@@ -78,7 +78,7 @@ namespace SignKeys.Effects.Platform.iOS
         protected override void OnAttached()
         {
             var effect = Element.Effects.FirstOrDefault(x => x is SignKeys.Effects.CustomTabViewEffect);
-            
+
             if (effect == null || Container == null) return;
 
             var containerRef = new WeakReference<UIView>(Container);
@@ -95,8 +95,38 @@ namespace SignKeys.Effects.Platform.iOS
                     me.rendererContainer.TrailingAnchor.ConstraintEqualTo(container.TrailingAnchor).Active = true;
                     me.rendererContainer.BottomAnchor.ConstraintEqualTo(container.BottomAnchor).Active = true;
                     //me.rendererContainer.HeightAnchor.ConstraintEqualTo((nfloat)xfView.HeightRequest + container.SafeAreaInsets.Bottom).Active = true;
-                    me.rendererContainer.TopAnchor.ConstraintEqualTo(container.LayoutMarginsGuide.BottomAnchor, -(nfloat)xfView.HeightRequest).Active = true;
-                    me.rendererContainer.UpdateBackgroundColor(TabEffect.GetTabbarColor(me.Element).ToUIColor());
+                    var heightConfig = TabEffect.GetCustomTabHeight(me.Element);
+                    if (heightConfig == null)
+                    {
+                        var constraint = me.rendererContainer.TopAnchor.ConstraintEqualTo(container.LayoutMarginsGuide.BottomAnchor, -(nfloat)xfView.HeightRequest);
+                        constraint.SetIdentifier("top_to_bottom");
+                        constraint.Active = true;
+                    }
+                    else
+                    {
+                        if (heightConfig.Mode == TabHeightMode.Absolute)
+                        {
+                            var constraint = me.rendererContainer.TopAnchor.ConstraintEqualTo(container.LayoutMarginsGuide.BottomAnchor, -(nfloat)heightConfig.Value);
+                            constraint.SetIdentifier("top_to_bottom");
+                            constraint.Active = true;
+                        }
+                        else if (container.Subviews?.FirstOrDefault((v) => v is UITabBar) is UITabBar tabBar)
+                        {
+                            if (heightConfig.Mode == TabHeightMode.RelativeToNativeTabBar)
+                            {
+                                var constraint = me.rendererContainer.HeightAnchor.ConstraintEqualTo(tabBar.HeightAnchor, 1.0f, (nfloat)heightConfig.Value);
+                                constraint.SetIdentifier("relative_height");
+                                constraint.Active = true;
+                            }
+                            else
+                            {
+                                var constraint = me.rendererContainer.HeightAnchor.ConstraintEqualTo(tabBar.HeightAnchor, (nfloat)heightConfig.Value, 0.0f);
+                                constraint.SetIdentifier("proportional_height");
+                                constraint.Active = true;
+                            }
+                        }
+                    }
+                    me.rendererContainer.UpdateBackgroundColor(TabEffect.GetTabBarColor(me.Element).ToUIColor());
                 }
             });
         }
@@ -104,9 +134,98 @@ namespace SignKeys.Effects.Platform.iOS
         protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
         {
             base.OnElementPropertyChanged(args);
-            if (null != rendererContainer && args.PropertyName == TabEffect.TabbarColorProperty.PropertyName)
+            if (null == rendererContainer || null == Element || null == Container) return;
+            if (args.PropertyName == TabEffect.TabBarColorProperty.PropertyName)
             {
-                rendererContainer.UpdateBackgroundColor(TabEffect.GetTabbarColor(Element).ToUIColor());
+                rendererContainer.UpdateBackgroundColor(TabEffect.GetTabBarColor(Element).ToUIColor());
+            }
+            else if (args.PropertyName == TabEffect.CustomTabHeightProperty.PropertyName)
+            {
+                var heightConfig = TabEffect.GetCustomTabHeight(Element);
+                var contraints = rendererContainer.Constraints;
+                if (null == heightConfig || heightConfig.Mode == TabHeightMode.Absolute)
+                {
+                    var value = -(nfloat)(null == heightConfig ? ((VisualElement)Element).HeightRequest : heightConfig.Value);
+                    var found = false;
+                    var shouldStop = false;
+                    foreach (var c in contraints)
+                    {
+                        var id = c.GetIdentifier();
+                        switch (id)
+                        {
+                            case "top_to_bottom":
+                                c.Constant = value;
+                                found = true;
+                                break;
+                            case "relative_height":
+                            case "proportional_height":
+                                rendererContainer.RemoveConstraint(c);
+                                shouldStop = true;
+                                break;
+                            default: break;
+                        }
+                        if (found || shouldStop)
+                        {
+                            break;
+                        }
+                    }
+                    if (false == found)
+                    {
+                        var constraint = rendererContainer.TopAnchor.ConstraintEqualTo(Container.LayoutMarginsGuide.BottomAnchor, value);
+                        constraint.SetIdentifier("top_to_bottom");
+                        constraint.Active = true;
+                    }
+                }
+                else
+                {
+                    var value = (nfloat)heightConfig.Value;
+                    var shouldStop = false;
+                    var needNewConstraint = true;
+                    foreach (var c in contraints)
+                    {
+                        var id = c.GetIdentifier();
+                        switch (id)
+                        {
+                            case "top_to_bottom":
+                            case "proportional_height":
+                                rendererContainer.RemoveConstraint(c);
+                                shouldStop = true;
+                                break;
+                            case "relative_height":
+                                if (heightConfig.Mode == TabHeightMode.RelativeToNativeTabBar)
+                                {
+                                    c.Constant = value;
+                                    needNewConstraint = false;
+                                }
+                                else
+                                {
+                                    rendererContainer.RemoveConstraint(c);
+                                    shouldStop = true;
+                                }
+                                break;
+                            default: break;
+                        }
+                        if (!needNewConstraint || shouldStop)
+                        {
+                            break;
+                        }
+                    }
+                    if (needNewConstraint && Container.Subviews?.FirstOrDefault((v) => v is UITabBar) is UITabBar tabBar)
+                    {
+                        if (heightConfig.Mode == TabHeightMode.RelativeToNativeTabBar)
+                        {
+                            var constraint = rendererContainer.HeightAnchor.ConstraintEqualTo(tabBar.HeightAnchor, 1.0f, value);
+                            constraint.SetIdentifier("relative_height");
+                            constraint.Active = true;
+                        }
+                        else
+                        {
+                            var constraint = rendererContainer.HeightAnchor.ConstraintEqualTo(tabBar.HeightAnchor, value, 0.0f);
+                            constraint.SetIdentifier("proportional_height");
+                            constraint.Active = true;
+                        }
+                    }
+                }
             }
         }
 
