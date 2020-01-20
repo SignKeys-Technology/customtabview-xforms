@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="CustomTabViewEffectDemo.TabView"
+    HeightRequest="{OnPlatform iOS=64, Android=72}"
+    BackgroundColor="Transparent"
+    RowSpacing="0">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="16"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="80"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <BoxView
+        Color="Silver"
+        HeightRequest="1"
+        Grid.ColumnSpan="3"
+        VerticalOptions="End"/>
+    <BoxView
+        Color="Silver"
+        HeightRequest="60"
+        CornerRadius="40"
+        Grid.Column="1"
+        Grid.RowSpan="2"/>
+    <BoxView
+        Color="White"
+        Grid.Row="1"
+        Grid.ColumnSpan="3"/>
+    <BoxView
+        Color="White"
+        CornerRadius="39"
+        Margin="1"
+        Grid.Column="1"
+        Grid.RowSpan="2"/>
+    <Button
+        Grid.Row="1"
+        WidthRequest="30"
+        HeightRequest="30"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        CornerRadius="15"
+        />
+    <Button
+        Grid.RowSpan="2"
+        Grid.Column="1"
+        WidthRequest="44"
+        HeightRequest="44"
+        CornerRadius="22"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"/>
+     <Button
+        Grid.Row="1"
+         Grid.Column="2"
+        WidthRequest="30"
+        HeightRequest="30"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        CornerRadius="15"
+        />
+</Grid>
