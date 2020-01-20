@@ -29,6 +29,15 @@ namespace CustomTabViewEffectDemo
             }
         }
 
+        protected override void OnParentSet()
+        {
+            base.OnParentSet();
+            if (Parent is TabbedPage page)
+            {
+                UpdateTabIndex(page.Children.IndexOf(page.CurrentPage), false);
+            }
+        }
+
         private void SelectTab(int index)
         {
             UpdateTabIndex(index, true);
@@ -51,19 +60,7 @@ namespace CustomTabViewEffectDemo
                 {
                     IndexChanged?.Invoke(this, index);
                 }
-                if (Parent is TabbedPage page)
-                {
-                    page.CurrentPage = page.Children[index];
-                }
-                    //WeakReference<TabView> meRef = new WeakReference<TabView>(this);
-                    //Device.BeginInvokeOnMainThread(() =>
-                    //{
-                    //    if (meRef.TryGetTarget(out TabView me) && me.Parent is TabbedPage page)
-                    //    {
-                    //        page.CurrentPage = page.Children[me.currentIndex];
-                    //    }
-
-                    //});
+                this.HandleNewTabIndex(index);
             }
         }
 
