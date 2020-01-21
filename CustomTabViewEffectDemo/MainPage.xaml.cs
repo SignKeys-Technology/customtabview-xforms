@@ -14,6 +14,7 @@ namespace CustomTabViewEffectDemo
             On<Xamarin.Forms.PlatformConfiguration.Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
             TabEffect.SetCustomTabHeight(this, new TabHeight(TabHeightMode.RelativeToNativeTabBar, 16));
             InitializeComponent();
+            CurrentPage = Children[1];
         }
     }
 }

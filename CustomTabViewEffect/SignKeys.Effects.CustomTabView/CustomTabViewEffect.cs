@@ -103,6 +103,7 @@ namespace SignKeys.Effects
             if (newValue is ICustomTabView newView)
             {
                 element.CurrentPageChanged += CurrentPageChanged;
+                newView.OnTabSelected(element.Children.IndexOf(element.CurrentPage));
                 var newEffect = new CustomTabViewEffect();
                 element.Effects.Add(newEffect);
             }

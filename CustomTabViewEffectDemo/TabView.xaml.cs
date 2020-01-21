@@ -29,15 +29,6 @@ namespace CustomTabViewEffectDemo
             }
         }
 
-        protected override void OnParentSet()
-        {
-            base.OnParentSet();
-            if (Parent is TabbedPage page)
-            {
-                UpdateTabIndex(page.Children.IndexOf(page.CurrentPage), false);
-            }
-        }
-
         private void SelectTab(int index)
         {
             UpdateTabIndex(index, true);
