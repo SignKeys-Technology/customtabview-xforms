@@ -10,8 +10,7 @@
     x:Class="CustomTabViewEffectDemo.MainPage"
     effects:TabEffect.TabBarColor="White">
     <effects:TabEffect.TabView>
-        <local:TabView
-                VerticalOptions="End"/>
+        <local:TabView />
     </effects:TabEffect.TabView>
     <ContentPage
         Title="Page 1" BackgroundColor="AliceBlue">

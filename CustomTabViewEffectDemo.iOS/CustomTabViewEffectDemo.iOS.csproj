@@ -128,7 +128,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\CustomTabViewEffectDemo\CustomTabViewEffectDemo.csproj">
-      <Project>{9A1EF35D-4A10-4A92-AF1F-BDAC1F718F5D}</Project>
+      <Project>{54A2ECD3-EF9A-4A21-B179-78FF4E09D75B}</Project>
       <Name>CustomTabViewEffectDemo</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomTabViewEffect\SignKeys.Effects.CustomTabView\SignKeys.Effects.Platform.iOS\SignKeys.Effects.Platform.iOS.csproj">
