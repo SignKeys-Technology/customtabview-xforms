@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <!-- Required elements-->
+        <id>SignKeys.Effects.CustomTabViewEffect</id>
+       <version>1.0.0</version>
+        <authors>SignKeys</authors>
+        <owners>SIGNKEYS COMPANY LIMITED</owners>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <title>SignKeys - Custom bottom tab view for Xamarin.Forms</title>
+        <description>Overlay a custom view on the tab bar of a TabbedPage</description>
+        <releaseNotes>First release</releaseNotes>
+        <copyright>Copyright (c) 2020 SignKeys</copyright>
+        <licenseUrl>https://opensource.org/licenses/Apache-2.0</licenseUrl>
+        <projectUrl>https://github.com/NAXAM/toptabbedpage-xforms</projectUrl>
+        <iconUrl>https://avatars1.githubusercontent.com/u/25535951</iconUrl>
+        <tags>Xamarin.Forms, Xamarin.iOS, Xamarin.Android, tabbed-page, tabbedpage</tags>
+        <dependencies>
+            <group>
+                <dependency id="Xamarin.Forms" version="4.4.0.99126" />
+            </group>
+        </dependencies>
+    </metadata>
+    <!-- Optional 'files' node -->
+    <files>
+        <!--PCL-->
+        <file src="CustomTabViewEffect/SignKeys.Effects.CustomTabView/bin/Release/SignKeys.Effects.CustomTabView.dll" target="lib/netstandard2.0/SignKeys.Effects.CustomTabView.dll" />
+
+        <!--Android-->
+        <file src="CustomTabViewEffect/SignKeys.Effects.CustomTabView/bin/Release/SignKeys.Effects.CustomTabView.dll" target="lib/netstandard2.0/SignKeys.Effects.CustomTabView.dll" />
+        <file src="CustomTabViewEffect/SignKeys.Effects.CustomTabView/SignKeys.Effects.Platform.Droid/bin/Release/SignKeys.Effects.Platform.Droid.dll" target="lib/MonoAndroid10/SignKeys.Effects.Platform.Droid.dll" />
+
+        <!--iOS-->
+        <file src="CustomTabViewEffect/SignKeys.Effects.CustomTabView/bin/Release/SignKeys.Effects.CustomTabView.dll" target="lib/netstandard2.0/SignKeys.Effects.CustomTabView.dll" />
+        <file src="CustomTabViewEffect/SignKeys.Effects.CustomTabView/SignKeys.Effects.Platform.iOS/bin/Release/SignKeys.Effects.Platform.iOS.dll" target="lib/Xamarin.iOS10/SignKeys.Effects.Platform.iOS.dll" />
+    </files>
+</package>
