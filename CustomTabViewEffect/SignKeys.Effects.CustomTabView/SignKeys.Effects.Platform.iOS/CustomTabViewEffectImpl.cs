@@ -53,6 +53,8 @@ namespace SignKeys.Effects.Platform.iOS
             }
         }
 
+        public VisualElement FormsView => null == renderer ? null : ((IVisualElementRenderer)renderer).Element;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -70,6 +72,8 @@ namespace SignKeys.Effects.Platform.iOS
     public class CustomTabViewEffectImpl : PlatformEffect
     {
         RendererContainer rendererContainer;
+        UIImage originalShadowImage;
+        UIImage originalBackgroundImage;
 
         public static void Preserve()
         {
@@ -96,6 +100,16 @@ namespace SignKeys.Effects.Platform.iOS
                     me.rendererContainer.BottomAnchor.ConstraintEqualTo(container.BottomAnchor).Active = true;
                     //me.rendererContainer.HeightAnchor.ConstraintEqualTo((nfloat)xfView.HeightRequest + container.SafeAreaInsets.Bottom).Active = true;
                     var heightConfig = TabEffect.GetCustomTabHeight(me.Element);
+                    var tabBar = me.Container.Subviews?.FirstOrDefault((v) => v is UITabBar) as UITabBar;
+                    if (null != tabBar)
+                    {
+                        // Remove bar's shadow & top line
+                        me.originalBackgroundImage = tabBar.BackgroundImage;
+                        tabBar.BackgroundImage = new UIImage();
+                        me.originalShadowImage = tabBar.ShadowImage;
+                        tabBar.ShadowImage = new UIImage();
+                        tabBar.ClipsToBounds = true;
+                    }
                     if (heightConfig == null)
                     {
                         var constraint = me.rendererContainer.TopAnchor.ConstraintEqualTo(container.LayoutMarginsGuide.BottomAnchor, -(nfloat)xfView.HeightRequest);
@@ -110,7 +124,7 @@ namespace SignKeys.Effects.Platform.iOS
                             constraint.SetIdentifier("top_to_bottom");
                             constraint.Active = true;
                         }
-                        else if (container.Subviews?.FirstOrDefault((v) => v is UITabBar) is UITabBar tabBar)
+                        else if (null != tabBar)
                         {
                             if (heightConfig.Mode == TabHeightMode.RelativeToNativeTabBar)
                             {
@@ -145,7 +159,7 @@ namespace SignKeys.Effects.Platform.iOS
                 var contraints = rendererContainer.Constraints;
                 if (null == heightConfig || heightConfig.Mode == TabHeightMode.Absolute)
                 {
-                    var value = -(nfloat)(null == heightConfig ? ((VisualElement)Element).HeightRequest : heightConfig.Value);
+                    var value = -(nfloat)(null == heightConfig ? (rendererContainer.FormsView?.HeightRequest ?? 0) : heightConfig.Value);
                     var found = false;
                     var shouldStop = false;
                     foreach (var c in contraints)
@@ -234,6 +248,12 @@ namespace SignKeys.Effects.Platform.iOS
             rendererContainer?.RemoveFromSuperview();
             rendererContainer?.Dispose();
             rendererContainer = null;
+            if (Container.Subviews?.FirstOrDefault((v) => v is UITabBar) is UITabBar tabBar)
+            {
+                tabBar.ShadowImage = originalShadowImage;
+                tabBar.BackgroundImage = originalBackgroundImage;
+                tabBar.ClipsToBounds = false;
+            }
         }
     }
 }
