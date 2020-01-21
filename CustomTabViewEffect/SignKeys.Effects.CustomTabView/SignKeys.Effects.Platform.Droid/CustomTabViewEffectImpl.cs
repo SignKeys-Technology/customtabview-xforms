@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Android.Runtime;
 using Android.Support.Design.Widget;
@@ -42,43 +43,11 @@ namespace SignKeys.Effects.Platform.Droid
                     Xamarin.Forms.Platform.Android.Platform.SetRenderer(xfView, renderer);
                     renderer.Elevation = bottomNavView.Elevation + 1;
                     renderer.Tracker.UpdateLayout();
+                    me.renderer = renderer;
+                    var viewHeight = me.CaculateTabHeight(bottomNavView);
 
-                    var tabHeight = TabEffect.GetCustomTabHeight(me.Element);
-                    int viewHeight = 0;
-                    var formViewHeight = xfView.HeightRequest;
-                    if (null == tabHeight)
-                    {
-                        viewHeight = (int)container.Context.ToPixels(xfView.HeightRequest);
-                    }
-                    else
-                    {
-                        switch (tabHeight.Mode)
-                        {
-                            case TabHeightMode.Absolute:
-                                viewHeight = (int)container.Context.ToPixels(tabHeight.Value);
-                                formViewHeight = tabHeight.Value;
-                                break;
-                            case TabHeightMode.RelativeToNativeTabBar:
-                                viewHeight = (int)Math.Round((double)bottomNavView.Height + container.Context.ToPixels(tabHeight.Value));
-                                formViewHeight = container.Context.FromPixels(bottomNavView.Height) + tabHeight.Value;
-                                break;
-                            case TabHeightMode.ProportionalToNativeTabBar:
-                                viewHeight = (int)Math.Round((double)bottomNavView.Height * tabHeight.Value);
-                                formViewHeight = container.Context.FromPixels((double)bottomNavView.Height * tabHeight.Value);
-                                break;
-                            default: break;
-                        }
-                    } 
-                    renderer.Layout(0, 0, bottomNavView.Width, viewHeight);
-                    xfView.Layout(new Rectangle(0, 0, container.Context.FromPixels(bottomNavView.Width), formViewHeight));
                     me.layoutChangeListener = new RendererLayoutChangeListener();
                     renderer.AddOnLayoutChangeListener(me.layoutChangeListener);
-                    if (null != tabHeight && tabHeight.Mode != TabHeightMode.Absolute)
-                    {
-                        me.tabBarLayoutChangeListener = new TabBarLayoutChangeListener();
-                        me.tabBarLayoutChangeListener.HeightChanged += me.HandleTabBarHeightChanged;
-                        bottomNavView.AddOnLayoutChangeListener(me.tabBarLayoutChangeListener);
-                    }
 
                     var layoutParams = new Android.Widget.RelativeLayout.LayoutParams(
                          Android.Widget.RelativeLayout.LayoutParams.MatchParent,
@@ -87,27 +56,86 @@ namespace SignKeys.Effects.Platform.Droid
                     layoutParams.AddRule(Android.Widget.LayoutRules.AlignBottom, bottomNavView.Id);
                     var parentView = (Android.Widget.RelativeLayout)bottomNavView.Parent;
                     parentView.AddView(renderer, layoutParams);
-                    me.renderer = renderer;
                 }
             });
         }
 
+        int CaculateTabHeight(BottomNavigationView bottomNavView)
+        {
+            var xfView = renderer.Element;
+            var tabHeight = TabEffect.GetCustomTabHeight(Element);
+            int viewHeight = 0;
+            var formViewHeight = xfView.HeightRequest;
+            if (null == tabHeight)
+            {
+                viewHeight = (int)Container.Context.ToPixels(xfView.HeightRequest);
+            }
+            else if (tabHeight.Mode == TabHeightMode.Absolute)
+            {
+                viewHeight = (int)Container.Context.ToPixels(tabHeight.Value);
+                formViewHeight = tabHeight.Value;
+            }
+            else if (bottomNavView != null)
+            {
+                if (tabHeight.Mode == TabHeightMode.RelativeToNativeTabBar)
+                {
+                    viewHeight = (int)Math.Round((double)bottomNavView.Height + Container.Context.ToPixels(tabHeight.Value));
+                    formViewHeight = Container.Context.FromPixels(bottomNavView.Height) + tabHeight.Value;
+                }
+                else
+                {
+                    viewHeight = (int)Math.Round((double)bottomNavView.Height * tabHeight.Value);
+                    formViewHeight = Container.Context.FromPixels((double)bottomNavView.Height * tabHeight.Value);
+
+                }
+                tabBarLayoutChangeListener = new TabBarLayoutChangeListener();
+                tabBarLayoutChangeListener.HeightChanged += HandleTabBarHeightChanged;
+                bottomNavView.AddOnLayoutChangeListener(tabBarLayoutChangeListener);
+            }
+            if (bottomNavView != null)
+            {
+                renderer.Layout(0, 0, bottomNavView.Width, viewHeight);
+                xfView.Layout(new Rectangle(0, 0, Container.Context.FromPixels(bottomNavView.Width), formViewHeight));
+            }
+            return viewHeight;
+        }
+
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnElementPropertyChanged(args);
+            if (args.PropertyName == TabEffect.CustomTabHeightProperty.PropertyName
+                && null != Container
+                && null != renderer)
+            {
+                var bottomNavView = Container.GetChildView<BottomNavigationView>();
+                RemoveTabBarHeightListener(bottomNavView);
+                if (!(renderer.LayoutParameters is Android.Widget.RelativeLayout.LayoutParams layoutParams)) return;
+                var viewHeight = CaculateTabHeight(bottomNavView);
+                if (viewHeight != layoutParams.Height)
+                {
+                    layoutParams.Height = viewHeight;
+                    renderer.LayoutParameters = layoutParams;
+                }
+            }
+        }
+
+        void RemoveTabBarHeightListener(BottomNavigationView bottomNavView)
+        {
+            if (null != tabBarLayoutChangeListener)
+            {
+                bottomNavView?.RemoveOnLayoutChangeListener(tabBarLayoutChangeListener);
+                tabBarLayoutChangeListener.HeightChanged -= HandleTabBarHeightChanged;
+                tabBarLayoutChangeListener.Dispose();
+                tabBarLayoutChangeListener = null;
+            }
+        }
+
         private void HandleTabBarHeightChanged(object sender, int height)
         {
-            if (null == Container
-                || !(Element is VisualElement element)
+            if (null == base.Container
                 || !(sender is BottomNavigationView bottomNavView)
-                || !(bottomNavView.Parent is ViewGroup viewGroup)) return;
-            var count = viewGroup.ChildCount;
-            VisualElementRenderer<Xamarin.Forms.View> renderer = null;
-            var i = count - 1;
-            while (i >= 0)
-            {
-                renderer = viewGroup.GetChildAt(i) as VisualElementRenderer<Xamarin.Forms.View>;
-                if (null != renderer) break;
-                i--;
-            }
-            if (null == renderer) return;
+                || !(bottomNavView.Parent is ViewGroup viewGroup)
+                || null == renderer) return;
             var layoutParams = renderer.LayoutParameters as Android.Widget.RelativeLayout.LayoutParams;
             var tabHeight = TabEffect.GetCustomTabHeight(Element);
             if (null == layoutParams || null == tabHeight || tabHeight.Mode == TabHeightMode.Absolute) return;
@@ -138,17 +166,7 @@ namespace SignKeys.Effects.Platform.Droid
                 layoutChangeListener.Dispose();
                 layoutChangeListener = null;
             }
-            if (null != tabBarLayoutChangeListener)
-            {
-                if (Container?.GetChildView<BottomNavigationView>() is BottomNavigationView bottomNavView)
-                {
-                    bottomNavView.RemoveOnLayoutChangeListener(tabBarLayoutChangeListener);
-                }
-                tabBarLayoutChangeListener.HeightChanged -= HandleTabBarHeightChanged;
-                tabBarLayoutChangeListener.Dispose();
-                tabBarLayoutChangeListener = null;
-            }
-            
+            RemoveTabBarHeightListener(Container?.GetChildView<BottomNavigationView>());
             renderer?.RemoveFromParent();
             renderer?.Dispose();
             renderer = null;
@@ -157,7 +175,7 @@ namespace SignKeys.Effects.Platform.Droid
 
     static class ViewGroupExtentions
     {
-        public static T GetChildView<T>(this ViewGroup group) where T: Android.Views.View
+        public static T GetChildView<T>(this ViewGroup group) where T : Android.Views.View
         {
             var count = group.ChildCount;
             var i = 0;
