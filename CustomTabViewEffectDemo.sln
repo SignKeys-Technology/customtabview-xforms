@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomTabViewEffect", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignKeys.Effects", "CustomTabViewEffect\SignKeys.Effects.CustomTabView\SignKeys.Effects.csproj", "{C6B54529-98CF-4E4A-953C-24BD7B753CA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignKeys.Effects.Platform.iOS", "CustomTabViewEffect\SignKeys.Effects.CustomTabView\SignKeys.Effects.Platform.iOS\SignKeys.Effects.Platform.iOS.csproj", "{E41B0720-18DC-481F-A378-30E573497E64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignKeys.Effects.Platform.iOS", "CustomTabViewEffect\SignKeys.Effects.Platform.iOS\SignKeys.Effects.Platform.iOS.csproj", "{E41B0720-18DC-481F-A378-30E573497E64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignKeys.Effects.Platform.Droid", "CustomTabViewEffect\SignKeys.Effects.CustomTabView\SignKeys.Effects.Platform.Droid\SignKeys.Effects.Platform.Droid.csproj", "{EC9CD3CA-1421-41ED-8FFE-98419066D2A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignKeys.Effects.Platform.Droid", "CustomTabViewEffect\SignKeys.Effects.Platform.Droid\SignKeys.Effects.Platform.Droid.csproj", "{EC9CD3CA-1421-41ED-8FFE-98419066D2A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTabViewEffectDemo", "CustomTabViewEffectDemo\CustomTabViewEffectDemo.csproj", "{54A2ECD3-EF9A-4A21-B179-78FF4E09D75B}"
 EndProject
