@@ -22,4 +22,6 @@
         Title="Page 2" BackgroundColor="Beige"/>
     <ContentPage
         Title="Page 3" BackgroundColor="Black"/>
+    <ContentPage
+        Title="Page 4" BackgroundColor="Red"/>
 </TabbedPage>

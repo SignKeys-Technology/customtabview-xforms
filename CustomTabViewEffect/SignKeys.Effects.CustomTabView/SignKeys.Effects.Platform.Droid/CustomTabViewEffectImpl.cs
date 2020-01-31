@@ -38,7 +38,8 @@ namespace SignKeys.Effects.Platform.Droid
                 && container.GetChildView<BottomNavigationView>() is BottomNavigationView bottomNavView
                 && TabEffect.GetTabView(me.Element) is VisualElement xfView)
                 {
-                    container.SetBackgroundColor(Android.Graphics.Color.Red);
+                    bottomNavView.DisableView();
+
                     var renderer = (VisualElementRenderer<Xamarin.Forms.View>)Xamarin.Forms.Platform.Android.Platform.CreateRendererWithContext(xfView, container.Context);
                     Xamarin.Forms.Platform.Android.Platform.SetRenderer(xfView, renderer);
                     renderer.Elevation = bottomNavView.Elevation + 1;
@@ -197,6 +198,24 @@ namespace SignKeys.Effects.Platform.Droid
             }
             return default(T);
         }
+
+
+        public static void DisableView(this Android.Views.View v)
+        {
+            v.Clickable = false;
+            v.ContextClickable = false;
+            v.Enabled = false;
+            if (v is ViewGroup g)
+            {
+                var count = g.ChildCount;
+                var i = 0;
+                while (i < count)
+                {
+                    DisableView(g.GetChildAt(i));
+                    i++;
+                }
+            }
+        }
     }
 
     internal class TabBarLayoutChangeListener : Java.Lang.Object, Android.Views.View.IOnLayoutChangeListener
@@ -214,6 +233,7 @@ namespace SignKeys.Effects.Platform.Droid
         {
             HeightChanged?.Invoke(v, bottom - top);
         }
+
     }
 
     internal class RendererLayoutChangeListener : Java.Lang.Object, Android.Views.View.IOnLayoutChangeListener
