@@ -65,7 +65,7 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SignKeys.Effects.csproj">
+    <ProjectReference Include="..\SignKeys.Effects.CustomTabView\SignKeys.Effects.csproj">
       <Project>{C6B54529-98CF-4E4A-953C-24BD7B753CA9}</Project>
       <Name>SignKeys.Effects</Name>
     </ProjectReference>

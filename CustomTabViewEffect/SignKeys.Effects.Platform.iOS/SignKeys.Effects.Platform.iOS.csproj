@@ -49,11 +49,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\CustomTabViewEffectDemo\CustomTabViewEffectDemo.csproj">
-      <Project>{54A2ECD3-EF9A-4A21-B179-78FF4E09D75B}</Project>
-      <Name>CustomTabViewEffectDemo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SignKeys.Effects.csproj">
+    <ProjectReference Include="..\SignKeys.Effects.CustomTabView\SignKeys.Effects.csproj">
       <Project>{C6B54529-98CF-4E4A-953C-24BD7B753CA9}</Project>
       <Name>SignKeys.Effects</Name>
     </ProjectReference>
