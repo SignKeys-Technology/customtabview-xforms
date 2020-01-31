@@ -11,13 +11,21 @@
         <description>Overlay a custom view on the tab bar of a TabbedPage</description>
         <releaseNotes>First release</releaseNotes>
         <copyright>Copyright (c) 2020 SignKeys</copyright>
-        <licenseUrl>https://opensource.org/licenses/Apache-2.0</licenseUrl>
+        <license type="expression">Apache-2.0</license>
         <projectUrl>https://github.com/NAXAM/toptabbedpage-xforms</projectUrl>
         <iconUrl>https://avatars1.githubusercontent.com/u/25535951</iconUrl>
         <tags>Xamarin.Forms, Xamarin.iOS, Xamarin.Android, tabbed-page, tabbedpage</tags>
         <dependencies>
             <group>
                 <dependency id="Xamarin.Forms" version="4.4.0.99126" />
+            </group>
+            <group targetFramework="MonoAndroid10">
+                <!--MonoAndroid dependencies go here-->
+            </group>
+            <group targetFramework="Xamarin.iOS10">
+                <!--Xamarin.iOS10 dependencies go here-->
+            </group>
+            <group targetFramework="netstandard2.0">
             </group>
         </dependencies>
     </metadata>
