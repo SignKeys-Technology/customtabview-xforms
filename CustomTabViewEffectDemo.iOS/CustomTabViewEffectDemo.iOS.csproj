@@ -131,7 +131,7 @@
       <Project>{54A2ECD3-EF9A-4A21-B179-78FF4E09D75B}</Project>
       <Name>CustomTabViewEffectDemo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CustomTabViewEffect\SignKeys.Effects.CustomTabView\SignKeys.Effects.Platform.iOS\SignKeys.Effects.Platform.iOS.csproj">
+    <ProjectReference Include="..\CustomTabViewEffect\SignKeys.Effects.Platform.iOS\SignKeys.Effects.Platform.iOS.csproj">
       <Project>{E41B0720-18DC-481F-A378-30E573497E64}</Project>
       <Name>SignKeys.Effects.Platform.iOS</Name>
     </ProjectReference>

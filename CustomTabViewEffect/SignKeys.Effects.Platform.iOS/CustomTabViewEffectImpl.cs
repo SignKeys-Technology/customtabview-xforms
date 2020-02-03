@@ -14,15 +14,16 @@ namespace SignKeys.Effects.Platform.iOS
 {
     internal class RendererContainer : UIView
     {
-        UIView renderer;
+        public UIView Renderer { get; private set; }
         UIView bottomSpace;
         public RendererContainer(Xamarin.Forms.VisualElement element)
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
+            AccessibilityIdentifier = "SignKeys.Effects.Platform.iOS.RendererContainer";
             BackgroundColor = UIColor.Clear;
-            renderer = (UIView)Xamarin.Forms.Platform.iOS.Platform.CreateRenderer(element);
-            renderer.TranslatesAutoresizingMaskIntoConstraints = false;
-            AddSubview(renderer);
+            Renderer = (UIView)Xamarin.Forms.Platform.iOS.Platform.CreateRenderer(element);
+            Renderer.TranslatesAutoresizingMaskIntoConstraints = false;
+            AddSubview(Renderer);
             bottomSpace = new UIView()
             {
                 TranslatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +33,7 @@ namespace SignKeys.Effects.Platform.iOS
                 (NSString)"renderer",
                 (NSString)"space"
             }, new NSObject[] {
-                renderer,
+                Renderer,
                 bottomSpace
             });
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-0-[renderer]-0-|", NSLayoutFormatOptions.AlignAllTop, null, views));
@@ -42,7 +43,7 @@ namespace SignKeys.Effects.Platform.iOS
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
-            ((IVisualElementRenderer)renderer).Element.Layout(renderer.Frame.ToRectangle());
+            ((IVisualElementRenderer)Renderer).Element.Layout(Renderer.Frame.ToRectangle());
         }
 
         public void UpdateBackgroundColor(UIColor color)
@@ -53,15 +54,15 @@ namespace SignKeys.Effects.Platform.iOS
             }
         }
 
-        public VisualElement FormsView => null == renderer ? null : ((IVisualElementRenderer)renderer).Element;
+        public VisualElement FormsView => null == Renderer ? null : ((IVisualElementRenderer)Renderer).Element;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                renderer?.RemoveFromSuperview();
-                renderer?.Dispose();
-                renderer = null;
+                Renderer?.RemoveFromSuperview();
+                Renderer?.Dispose();
+                Renderer = null;
                 bottomSpace?.RemoveFromSuperview();
                 bottomSpace?.Dispose();
                 bottomSpace = null;
@@ -149,6 +150,19 @@ namespace SignKeys.Effects.Platform.iOS
         {
             base.OnElementPropertyChanged(args);
             if (null == rendererContainer || null == Element || null == Container) return;
+            if (args.PropertyName == VisualElement.HeightProperty.PropertyName)
+            {
+                var heightConfig = TabEffect.GetCustomTabHeight(Element);
+                if (null == heightConfig)
+                {
+                    var contraints = rendererContainer.Constraints;
+                    if (contraints.FirstOrDefault((c) => string.Equals(c.GetIdentifier(), "top_to_bottom")) is NSLayoutConstraint constraint)
+                    {
+                        constraint.Constant = -(nfloat)((VisualElement)Element).HeightRequest;
+                        rendererContainer.UpdateConstraints();
+                    }
+                }
+            }
             if (args.PropertyName == TabEffect.TabBarColorProperty.PropertyName)
             {
                 rendererContainer.UpdateBackgroundColor(TabEffect.GetTabBarColor(Element).ToUIColor());
