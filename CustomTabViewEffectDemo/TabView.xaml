@@ -5,6 +5,7 @@
     x:Class="CustomTabViewEffectDemo.TabView"
     HeightRequest="{OnPlatform iOS=60, Android=72}"
     BackgroundColor="Transparent"
+    IsClippedToBounds="False"
     RowSpacing="0">
     <Grid.RowDefinitions>
         <RowDefinition Height="16"/>
@@ -37,6 +38,7 @@
         Grid.Column="1"
         Grid.RowSpan="2"/>
     <Button
+       AutomationId="Left button"
         Grid.Row="1"
         WidthRequest="30"
         HeightRequest="30"
@@ -45,6 +47,7 @@
         CornerRadius="15"
         />
     <Button
+        AutomationId="Center button"
         Grid.RowSpan="2"
         Grid.Column="1"
         WidthRequest="44"
@@ -52,7 +55,17 @@
         CornerRadius="22"
         VerticalOptions="Center"
         HorizontalOptions="Center"/>
+    <Button
+        AutomationId="Floating_Button"
+         x:Name="floater"
+         Opacity="0"
+         Grid.Row="1"
+         Grid.Column="2"
+        WidthRequest="30"
+        HeightRequest="30"
+         BackgroundColor="Blue"/>
      <Button
+         AutomationId="Right button"
         Grid.Row="1"
          Grid.Column="2"
         WidthRequest="30"
@@ -61,4 +74,6 @@
         HorizontalOptions="Center"
         CornerRadius="15"
         />
+     
+         
 </Grid>

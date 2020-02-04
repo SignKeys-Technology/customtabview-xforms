@@ -19,7 +19,7 @@ namespace SignKeys.Effects.Platform.iOS
         public RendererContainer(Xamarin.Forms.VisualElement element)
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
-            AccessibilityIdentifier = "SignKeys.Effects.Platform.iOS.RendererContainer";
+            AccessibilityIdentifier = CustomTabViewEffect.RendererContainerIdentifier;
             BackgroundColor = UIColor.Clear;
             Renderer = (UIView)Xamarin.Forms.Platform.iOS.Platform.CreateRenderer(element);
             Renderer.TranslatesAutoresizingMaskIntoConstraints = false;

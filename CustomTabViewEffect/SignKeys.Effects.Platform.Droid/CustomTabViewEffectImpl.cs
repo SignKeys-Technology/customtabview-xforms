@@ -42,7 +42,6 @@ namespace SignKeys.Effects.Platform.Droid
 
                     var renderer = (VisualElementRenderer<Xamarin.Forms.View>)Xamarin.Forms.Platform.Android.Platform.CreateRendererWithContext(xfView, container.Context);
                     Xamarin.Forms.Platform.Android.Platform.SetRenderer(xfView, renderer);
-                    renderer.Elevation = bottomNavView.Elevation + 1;
                     renderer.Tracker.UpdateLayout();
                     me.renderer = renderer;
                     var viewHeight = me.CaculateTabHeight(bottomNavView);
@@ -56,7 +55,21 @@ namespace SignKeys.Effects.Platform.Droid
                     //layoutParams.AddRule(Android.Widget.LayoutRules.AlignTop, bottomNavView.Id);
                     layoutParams.AddRule(Android.Widget.LayoutRules.AlignBottom, bottomNavView.Id);
                     var parentView = (Android.Widget.RelativeLayout)bottomNavView.Parent;
+                    var count = parentView.ChildCount;
+                    var i = 0;
+                    var maxEle = bottomNavView.Elevation;
+                    while (i < count)
+                    {
+                        var view = parentView.GetChildAt(i);
+                        if (view.Elevation > maxEle)
+                        {
+                            maxEle = view.Elevation;
+                        }
+                        i++;
+                    }
+                    renderer.Elevation = maxEle + 1;
                     parentView.AddView(renderer, layoutParams);
+                    
                 }
             });
         }

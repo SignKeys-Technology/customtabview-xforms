@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using SignKeys.Effects;
+using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -21,6 +22,27 @@ namespace CustomTabViewEffectDemo
             foreach (var c in Children)
             {
                 c.On<iOS>().SetUseSafeArea(true);
+            }
+        }
+
+        async void aButton_Clicked(System.Object sender, System.EventArgs e)
+        {
+            if (sender == bButton)
+            {
+                if (floatingBoxView.Opacity == 0)
+                {
+                    floatingBoxView.Opacity = 1;
+                    await floatingBoxView.TranslateTo(0, floatingBoxView.TranslationY - 200);
+                }
+                else
+                {
+                    await floatingBoxView.TranslateTo(0, floatingBoxView.TranslationY + 200);
+                    floatingBoxView.Opacity = 0;
+                }
+            }
+            else
+            {
+                await DisplayAlert("Button tapped", null, "OK");
             }
         }
     }

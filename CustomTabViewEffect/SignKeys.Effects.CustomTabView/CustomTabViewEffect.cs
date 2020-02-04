@@ -185,6 +185,7 @@ namespace SignKeys.Effects
     public class CustomTabViewEffect : RoutingEffect
     {
         const string NAME = "SignKeys.Effects.CustomTabViewEffect";
+        public static string RendererContainerIdentifier = "SignKeys.Effects.RendererContainer";
         public CustomTabViewEffect() : base(NAME)
         {
             

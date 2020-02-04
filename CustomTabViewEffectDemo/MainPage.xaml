@@ -13,29 +13,58 @@
         <local:TabView />
     </effects:TabEffect.TabView>
     <ContentPage
-        Title="Page 1" BackgroundColor="AliceBlue">
+        Title="Page 1"
+        BackgroundColor="AliceBlue">
         <Grid>
+            <Button
+                x:Name="aButton"
+                Clicked="aButton_Clicked"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Text="Tap me" />
             <BoxView
                 HeightRequest="100"
                 WidthRequest="100"
                 Color="Red"
                 VerticalOptions="End"
-                HorizontalOptions="Start"/>
+                HorizontalOptions="Start" />
         </Grid>
     </ContentPage>
     <ContentPage
-        Title="Page 2" BackgroundColor="Beige">
-         <Grid>
+        Title="Page 2"
+        BackgroundColor="Beige">
+        <Grid>
+            <StackLayout
+                Orientation="Vertical"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center">
+                <Button
+                    x:Name="bButton"
+                    Clicked="aButton_Clicked"
+                    Text="Tap me" />
+                <Grid
+                    HeightRequest="200"
+                    WidthRequest="200">
+                    <BoxView x:Name="floatingBoxView"
+                             WidthRequest="100"
+                             HeightRequest="100"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Color="Brown"/>
+                </Grid>
+            </StackLayout>
             <BoxView
                 HeightRequest="100"
                 WidthRequest="100"
                 Color="Red"
                 VerticalOptions="End"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center" />
         </Grid>
     </ContentPage>
     <ContentPage
-        Title="Page 3" BackgroundColor="Black"/>
+        Title="Page 3"
+        BackgroundColor="Black" />
     <ContentPage
-        Title="Page 4" BackgroundColor="Red"/>
+        Title="Page 4"
+        BackgroundColor="Red" />
 </TabbedPage>
