@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:effects="clr-namespace:SignKeys.Effects;assembly=SignKeys.Effects.CustomTabView"
+    xmlns:effects="clr-namespace:SignKeys.Effects;assembly=SignKeys.Effects"
     xmlns:local="clr-namespace:CustomTabViewEffectDemo"
     mc:Ignorable="d"
     x:Class="CustomTabViewEffectDemo.MainPage"
@@ -14,12 +14,26 @@
     </effects:TabEffect.TabView>
     <ContentPage
         Title="Page 1" BackgroundColor="AliceBlue">
-        <!--<Grid>
-            
-        </Grid>-->
+        <Grid>
+            <BoxView
+                HeightRequest="100"
+                WidthRequest="100"
+                Color="Red"
+                VerticalOptions="End"
+                HorizontalOptions="Start"/>
+        </Grid>
     </ContentPage>
     <ContentPage
-        Title="Page 2" BackgroundColor="Beige"/>
+        Title="Page 2" BackgroundColor="Beige">
+         <Grid>
+            <BoxView
+                HeightRequest="100"
+                WidthRequest="100"
+                Color="Red"
+                VerticalOptions="End"
+                HorizontalOptions="Center"/>
+        </Grid>
+    </ContentPage>
     <ContentPage
         Title="Page 3" BackgroundColor="Black"/>
     <ContentPage

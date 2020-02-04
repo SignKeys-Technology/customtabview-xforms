@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using SignKeys.Effects;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace CustomTabViewEffectDemo
 {
@@ -13,8 +15,13 @@ namespace CustomTabViewEffectDemo
         {
             On<Xamarin.Forms.PlatformConfiguration.Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
             TabEffect.SetCustomTabHeight(this, new TabHeight(TabHeightMode.RelativeToNativeTabBar, 16));
+            TabEffect.SetBottomContentOffset(this, 16);
             InitializeComponent();
             CurrentPage = Children[1];
+            foreach (var c in Children)
+            {
+                c.On<iOS>().SetUseSafeArea(true);
+            }
         }
     }
 }
